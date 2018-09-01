@@ -15,6 +15,8 @@
 %%%%
 
 \usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{tikz-uml}
 
 \begin{document}
 
@@ -47,7 +49,17 @@
 
 \begin{figure}[h]
 \centering
-\includegraphics{pvm_types.pdf}
+\begin{tikzpicture}
+\umlsimpleclass{Entity}
+\umlsimpleclass[y=-2, x=2]{Actor}
+\umlsimpleclass[y=-2, x=-2]{Object}
+\umlsimpleclass[y=-4, x=-0.5]{Store}
+\umlsimpleclass[y=-4, x=-3.5]{ChannelEP}
+\umlinherit[geometry=|-|]{Actor}{Entity}
+\umlinherit[geometry=|-|]{Object}{Entity}
+\umlinherit[geometry=|-|]{Store}{Object}
+\umlinherit[geometry=|-|]{ChannelEP}{Object}
+\end{tikzpicture}
 \caption{A diagram of the basic abstract types in PVMv2}
 \end{figure}
 
@@ -69,6 +81,34 @@ Object type that data flows through without internal storage. Does not version. 
 
 \subsection{Nodes}
 
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+    \umlclass[type=abstract]{Node}{db\_id:int64}{}
+    \umlsimpleclass[x=-2, y=-3, type=abstract]{Name}
+    \umlclass[x=-6, y=-6]{Path}{path:String}{}
+    \umlclass[x=-2, y=-6]{Net}{addr:String \\ port:int32}{}
+    \umlclass[x=2, y=-3]{Entity}{ty:String \\ uuid:Uuid}{}
+    \umlclass[x=6, y=-3]{Type}{name:String \\ abstract:String \\ schema:[String]}{}
+    \umlsimpleclass[x=-6, y=-3, type=schema]{Context}
+    \umlsimpleclass[x=2, y=-6, type=schema]{Object}
+    \umlsimpleclass[x=6, y=-6, type=schema]{Actor}
+    \umlsimpleclass[x=2, y=-8, type=schema]{Store}
+    \umlsimpleclass[x=6, y=-8, type=schema]{Channel}
+    \umlinherit[geometry=|-|]{Name}{Node}
+    \umlinherit[geometry=|-|]{Path}{Name}
+    \umlinherit[geometry=|-|]{Net}{Name}
+    \umlinherit[geometry=|-|]{Entity}{Node}
+    \umlinherit[geometry=|-|, weight=0.55]{Type}{Node}
+    \umlinherit[geometry=|-|]{Context}{Node}
+    \umlinherit[geometry=|-|]{Object}{Entity}
+    \umlinherit[geometry=|-|, weight=0.3]{Actor}{Entity}
+    \umlinherit[geometry=|-|]{Store}{Object}
+    \umlinherit[geometry=|-|]{Channel}{Object}
+\end{tikzpicture}
+\caption{A diagram of the potential nodes in a PVMv2 database.}
+\end{figure}
+
 \subsubsection{Entity Nodes}
 
 \subsubsection{Non-canonical Names}
@@ -76,6 +116,10 @@ Object type that data flows through without internal storage. Does not version. 
 \paragraph{Path Names}
 
 \paragraph{Network Addresses}
+
+\subsubsection{Schema Nodes}
+
+\subsubsection{Context Nodes}
 
 \subsection{Relations}
 
@@ -111,5 +155,7 @@ Called as part of a mapped function to declare that two conduit nodes are connec
 \paragraph{Unlink}
 
 \paragraph{Property}
+
+\section{A Worked Example}
 
 \end{document}
