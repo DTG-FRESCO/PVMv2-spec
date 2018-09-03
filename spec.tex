@@ -17,6 +17,7 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{tikz-uml}
+\usepackage{hyperref}
 
 \begin{document}
 
@@ -46,6 +47,8 @@
 \section{Introduction}
 
 \section{Abstract Types}
+\label{sec:ty}
+The PVMv2 model defines a number of different abstract types which are used to both represent data in the resulting graph format, and as a basis for deriving concrete types to represent real trace entities. Figure~\ref{fig:types} shows a UML representation of the different types and how they are related. Below we will go into more detail on each of the types in turn.
 
 \begin{figure}[h]
 \centering
@@ -61,12 +64,16 @@
 \umlinherit[geometry=|-|]{ChannelEP}{Object}
 \end{tikzpicture}
 \caption{A diagram of the basic abstract types in PVMv2}
+\label{fig:types}
 \end{figure}
 
 \paragraph{Entity}
+\label{sec:ty:entity}
+ is the root abstract type. The common feature of all entities is that they possess a uniquely identifying name that is either totally unique for some subtypes, or is maintained for version chains for other subtypes. In general concrete types should not be derived from Entity unless there is no better option available.
 
 \paragraph{Actor}
-Active entities that perform actions. They act upon objects, or other actors. Generally processing elements like unix processes.
+\label{sec:ty:actor}
+ entities are active entities that perform actions, generally processing units such as unix processes, though they can also represent more abstract notions of processing. They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
 
 \paragraph{Object}
 Passive entities that are acted upon by actors. Generally data carrying entities.
@@ -84,23 +91,23 @@ Object type that data flows through without internal storage. Does not version. 
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}
-    \umlclass[type=abstract]{Node}{db\_id:int64}{}
-    \umlsimpleclass[x=-2, y=-3, type=abstract]{Name}
+    \umlclass[type=abstract]{Node}{db\_id:ID}{}
+    \umlclass[x=-2, y=-3, type=abstract]{Name}{ctx:ID}{}
     \umlclass[x=-6, y=-6]{Path}{path:String}{}
     \umlclass[x=-2, y=-6]{Net}{addr:String \\ port:int32}{}
-    \umlclass[x=2, y=-3]{Entity}{ty:String \\ uuid:Uuid}{}
+    \umlclass[x=2, y=-3]{Entity}{ty:String \\ uuid:Uuid \\ ctx:ID}{}
     \umlclass[x=6, y=-3]{Type}{name:String \\ abstract:String \\ schema:[String]}{}
     \umlsimpleclass[x=-6, y=-3, type=schema]{Context}
     \umlsimpleclass[x=2, y=-6, type=schema]{Object}
     \umlsimpleclass[x=6, y=-6, type=schema]{Actor}
     \umlsimpleclass[x=2, y=-8, type=schema]{Store}
     \umlsimpleclass[x=6, y=-8, type=schema]{Channel}
-    \umlinherit[geometry=|-|]{Name}{Node}
+    \umlinherit[geometry=|-|, weight=0.55]{Name}{Node}
     \umlinherit[geometry=|-|]{Path}{Name}
     \umlinherit[geometry=|-|]{Net}{Name}
-    \umlinherit[geometry=|-|]{Entity}{Node}
+    \umlinherit[geometry=|-|, weight=0.55]{Entity}{Node}
     \umlinherit[geometry=|-|, weight=0.55]{Type}{Node}
-    \umlinherit[geometry=|-|]{Context}{Node}
+    \umlinherit[geometry=|-|, weight=0.55]{Context}{Node}
     \umlinherit[geometry=|-|]{Object}{Entity}
     \umlinherit[geometry=|-|, weight=0.3]{Actor}{Entity}
     \umlinherit[geometry=|-|]{Store}{Object}
@@ -140,15 +147,15 @@ Forces the creation of entity if it does not already exist.
 
 \paragraph{Sink}
 Called when as part of a mapped function, an actor sinks data to an entity as an ‘atomic’ operation.
-Causes Files to version, creating a new File entity connected to the previous one by an INF relation.
-Creates an INF relation from actor to entity, attaching tag as the ‘type’ property. 
+Causes Stores to version, creating a new Store entity connected to the previous one by an INF relation.
+Creates an INF relation from actor to entity. 
 
 \paragraph{Source}
 Called when as part of a mapped function, an actor sources data from an entity.
-Creates an INF relation from entity to actor, attaching tag as the ‘type’ property.
+Creates an INF relation from entity to actor.
 
 \paragraph{Connect}
-Called as part of a mapped function to declare that two conduit nodes are connected to each other and that data can flow between them. The dir argument indicates the direction of flow, either mono or bi. Mono indicates that data may only flow from the first conduit to the second, bi indicates that data may flow in both directions. 
+Called as part of a mapped function to declare that two channel nodes are connected to each other and that data can flow between them. The dir argument indicates the direction of flow, either mono or bi. Mono indicates that data may only flow from the first channel to the second, bi indicates that data may flow in both directions. 
 
 \paragraph{Mention}
 
