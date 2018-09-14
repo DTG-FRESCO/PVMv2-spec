@@ -116,6 +116,10 @@ Object type that data flows through without internal storage. Does not version. 
 \caption{A diagram of the potential nodes in a PVMv2 database.}
 \end{figure}
 
+\subsubsection{Schema Nodes}
+
+\subsubsection{Context Nodes}
+
 \subsubsection{Entity Nodes}
 
 \subsubsection{Non-canonical Names}
@@ -124,11 +128,19 @@ Object type that data flows through without internal storage. Does not version. 
 
 \paragraph{Network Addresses}
 
-\subsubsection{Schema Nodes}
-
-\subsubsection{Context Nodes}
-
 \subsection{Relations}
+
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}
+    \umlclass[type=abstract]{Rel}{db\_id:ID}{}
+    \umlclass[x=3, y=-3]{INF}{ctx:ID \\ pvm\_op:String}{}
+    \umlclass[x=-3, y=-3]{NAMED}{start:ID \\ end:Option\textless ID\textgreater}{}
+    \umlinherit[geometry=|-|]{INF}{Rel}
+    \umlinherit[geometry=|-|]{NAMED}{Rel}
+\end{tikzpicture}
+\caption{A diagram of the potential relations in a PVMv2 database.}
+\end{figure}
 
 \paragraph{INF}
 Indicates that the source has potentially imparted data or control to the destination.
