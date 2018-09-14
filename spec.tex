@@ -1,6 +1,6 @@
 %%%% University of Cambridge tech-report formatting; enable when producing
 %%%% tech-report versions of these documents; otherwise, disable.
-\documentclass[12pt,twoside,openright,a4paper]{article}
+\documentclass[12pt,twoside,a4paper]{article}
 \setlength{\oddsidemargin}{-0.4mm} % 25 mm left margin
 \setlength{\evensidemargin}{\oddsidemargin}
 \setlength{\textwidth}{160mm}      % 25 mm right margin
@@ -17,30 +17,15 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{tikz-uml}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\Entity}{\hyperref[sec:ty:Entity]{Entity}}
 
 \begin{document}
-
 \title{PVMv2 Specification}
-\author{Thomas Bytheway & Lucian Carata}
+\author{Thomas Bytheway \and Lucian Carata}
 
-%% CL tech-report format provides its own cover page
-\begin{minipage}[h]{\textwidth}
-    \maketitle
-    \vspace{2in}
-    {\small}
-\end{minipage}
-%%
-
-\normalsize
-
-%% CL tech-report format requires page numbering to start at 3
-%\setcounter{page}{3}
-%%
-
-%% For revisions sent for editing, prefer double spacing.
-%\doublespacing
-%%
+\maketitle
 
 \clearpage
 
