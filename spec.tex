@@ -38,17 +38,7 @@ The PVMv2 model defines a number of different abstract types which are used to b
 
 \begin{figure}[h]
 \centering
-\begin{tikzpicture}
-\umlsimpleclass{Entity}
-\umlsimpleclass[y=-2, x=2]{Actor}
-\umlsimpleclass[y=-2, x=-2]{Object}
-\umlsimpleclass[y=-4, x=-0.5]{Store}
-\umlsimpleclass[y=-4, x=-3.5]{ChannelEP}
-\umlinherit[geometry=|-|]{Actor}{Entity}
-\umlinherit[geometry=|-|]{Object}{Entity}
-\umlinherit[geometry=|-|]{Store}{Object}
-\umlinherit[geometry=|-|]{ChannelEP}{Object}
-\end{tikzpicture}
+\input{types_fig}
 \caption{A diagram of the basic abstract types in PVMv2}
 \label{fig:types}
 \end{figure}
@@ -76,29 +66,7 @@ Object type that data flows through without internal storage. Does not version. 
 
 \begin{figure}[h]
 \centering
-\begin{tikzpicture}
-    \umlclass[type=abstract]{Node}{db\_id:ID}{}
-    \umlclass[x=-2, y=-3, type=abstract]{Name}{ctx:ID}{}
-    \umlclass[x=-6, y=-6]{Path}{path:String}{}
-    \umlclass[x=-2, y=-6]{Net}{addr:String \\ port:int32}{}
-    \umlclass[x=2, y=-3]{Entity}{ty:String \\ uuid:Uuid \\ ctx:ID}{}
-    \umlclass[x=6, y=-3]{Type}{name:String \\ abstract:String \\ schema:[String]}{}
-    \umlsimpleclass[x=-6, y=-3, type=schema]{Context}
-    \umlsimpleclass[x=2, y=-6, type=schema]{Object}
-    \umlsimpleclass[x=6, y=-6, type=schema]{Actor}
-    \umlsimpleclass[x=2, y=-8, type=schema]{Store}
-    \umlsimpleclass[x=6, y=-8, type=schema]{Channel}
-    \umlinherit[geometry=|-|, weight=0.55]{Name}{Node}
-    \umlinherit[geometry=|-|]{Path}{Name}
-    \umlinherit[geometry=|-|]{Net}{Name}
-    \umlinherit[geometry=|-|, weight=0.55]{Entity}{Node}
-    \umlinherit[geometry=|-|, weight=0.55]{Type}{Node}
-    \umlinherit[geometry=|-|, weight=0.55]{Context}{Node}
-    \umlinherit[geometry=|-|]{Object}{Entity}
-    \umlinherit[geometry=|-|, weight=0.3]{Actor}{Entity}
-    \umlinherit[geometry=|-|]{Store}{Object}
-    \umlinherit[geometry=|-|]{Channel}{Object}
-\end{tikzpicture}
+\input{nodes_fig}
 \caption{A diagram of the potential nodes in a PVMv2 database.}
 \end{figure}
 
@@ -116,15 +84,9 @@ Object type that data flows through without internal storage. Does not version. 
 
 \subsection{Relations}
 
-\begin{figure}[!h]
+\begin{figure}[h]
 \centering
-\begin{tikzpicture}
-    \umlclass[type=abstract]{Rel}{db\_id:ID}{}
-    \umlclass[x=3, y=-3]{INF}{ctx:ID \\ pvm\_op:String}{}
-    \umlclass[x=-3, y=-3]{NAMED}{start:ID \\ end:Option\textless ID\textgreater}{}
-    \umlinherit[geometry=|-|]{INF}{Rel}
-    \umlinherit[geometry=|-|]{NAMED}{Rel}
-\end{tikzpicture}
+\input{rel_fig}
 \caption{A diagram of the potential relations in a PVMv2 database.}
 \end{figure}
 

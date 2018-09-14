@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+\umlsimpleclass{Entity}
+\umlsimpleclass[y=-2, x=2]{Actor}
+\umlsimpleclass[y=-2, x=-2]{Object}
+\umlsimpleclass[y=-4, x=-0.5]{Store}
+\umlsimpleclass[y=-4, x=-3.5]{ChannelEP}
+\umlinherit[geometry=|-|]{Actor}{Entity}
+\umlinherit[geometry=|-|]{Object}{Entity}
+\umlinherit[geometry=|-|]{Store}{Object}
+\umlinherit[geometry=|-|]{ChannelEP}{Object}
+\end{tikzpicture}
