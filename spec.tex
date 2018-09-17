@@ -73,10 +73,13 @@ Object type that data flows through without internal storage. Does not version. 
 \end{figure}
 
 \subsubsection{Schema Nodes}
+Schema nodes describe concrete types that are defined by the mapping that created a database. Each node has a name of the type being defined, an abstract type that the concrete type is a class of, and a list of potential properties that it is valid for a node of that type to have.
 
 \subsubsection{Context Nodes}
 
+
 \subsubsection{Entity Nodes}
+Entity nodes represent an entity of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined earlier. All entity nodes have a uuid field defining the unique name for the entity, a ty field naming the concrete type that the entity is a representative of, and a ctx field noting the context under which the entity was created.
 
 \subsubsection{Non-canonical Names}
 
