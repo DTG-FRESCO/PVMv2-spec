@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-    \umlclass[type=abstract]{Rel}{db\_id:ID}{}
+    \umlclass[type=abstract]{Rel}{id:ID}{}
     \umlclass[x=3, y=-3]{INF}{ctx:ID \\ pvm\_op:String}{}
     \umlclass[x=-3, y=-3]{NAMED}{start:ID \\ end:Option\textless ID\textgreater}{}
     \umlinherit[geometry=|-|]{INF}{Rel}
