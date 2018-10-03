@@ -32,6 +32,7 @@
 \clearpage
 
 \section{Introduction}
+\label{sec:intro}
 PVMv2 is a model designed to aid in the extraction of high level data flow interactions from low level event traces. It achieves this by using descriptive mapping programs written in a custom DSL by people who understand the semantic content of the event trace in question. This mapping can then be applied to actual trace events and results in the iterative production of a dataflow graph.
 
 This document aims to describe the conceptual basis behind the PVMv2 model, explain how the resulting dataflow graph is structured and what assumptions can be made about it, and how one would go about creating a mapping to interpret new data under the guise of the PVMv2 model.
@@ -56,86 +57,112 @@ The PVMv2 model defines a number of different abstract types which are used to b
  entities are active entities that perform actions, generally processing units such as unix processes, though they can also represent more abstract notions of processing. They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
 
 \para{Object}
+\label{sec:ty:object}
 Passive entities that are acted upon by actors. Generally data carrying entities.
 
 \para{Store}
+\label{sec:ty:store}
 Object type that stores data internally. Versions from first write to last write, using EditSessions.
 
 \para{ChannelEP}
+\label{sec:ty:chanep}
 Object type that data flows through without internal storage. Does not version. May participate in connections.
 
 \section{Graph Schema}
+\label{sec:gs}
 In this section we will describe how a well formed PVMv2 graph will appear. This does not necessarily inform directly how an encoding of such a graph may appear in a given medium, but should be taken as a strong suggestion of how it will be structured. In \autoref{app:enc:neo4j} we describe the encoding of such graphs in Neo4j and in \autoref{app:enc:cdm} their encoding into CDM.
 
 \subsection{Nodes}
+\label{sec:gs:node}
 All graph nodes possess a unique id that is not shared with any other nodes in the same graph.
 
 \begin{figure}[h]
 \centering
 \input{nodes_fig}
 \caption{A diagram of the potential nodes in a PVMv2 database.}
+\label{fig:nodes}
 \end{figure}
 
 \subsubsection{Schema Nodes}
+\label{sec:gs:node:schema}
 Schema nodes describe concrete types that are defined by the mapping that created a database. Each node has a name of the type being defined, an abstract type that the concrete type is a class of, and a list of potential properties that it is valid for a node of that type to have.
 
 \subsubsection{Context Nodes}
-
+\label{sec:gs:node:context}
 
 \subsubsection{Entity Nodes}
+\label{sec:gs:node:entity}
 Entity nodes represent an \Entity~of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined earlier. All entity nodes have a \field{uuid}~field defining the unique name for the entity, a \field{ty}~field naming the concrete type that the entity is a representative of, and a \field{ctx}~field noting the context under which the entity was created.
 
 \subsubsection{Non-canonical Names}
+\label{sec:gs:node:name}
 
 \para{Path Names}
+\label{sec:gs:node:name:path}
 
 \para{Network Addresses}
+\label{sec:gs:node:name:net}
 
 \subsection{Relations}
+\label{sec:gs:rel}
 All relations also possess a uniquely identifying id that will not repeat within the same graph.
 
 \begin{figure}[h]
 \centering
 \input{rel_fig}
 \caption{A diagram of the potential relations in a PVMv2 database.}
+\label{fig:rels}
 \end{figure}
 
 \para{INF}
+\label{sec:gs:rel:inf}
 Indicates that the source has potentially imparted data or control to the destination. An INF relation has a \field{ctx}~property that notes the context that it was created under. The relation also has a \field{pvm\_op}~field that describes which PVM verb was being processed when the edge was created, this can have one of the following values: Source, Sink, Connect, Version or Unknown. Edges with the Version op value are created when a verb causes a new node to come into existence which is notionally a new version of an existing node. It should be expected that two nodes on the ends of a version edge have the same UUID and represent a continuation of the same object. Unknown should not be used explicitly and is mostly provided as a safe default `don't know' option for parsing. Inf relations are in general only permitted between nodes that are Entity nodes of their subclasses.
 
 \para{NAMED}
+\label{sec:gs:rel:named}
 Indicates that the source has been mentioned by the destination non-canonical name.
 
 \section{Mappings}
+\label{sec:map}
 
 \subsection{Concrete Type Declaration}
+\label{sec:map:tydef}
 
 \subsection{Verbs}
+\label{sec:map:verbs}
 
 \para{Declare}
+\label{sec:map:verbs:declare}
 Forces the creation of entity if it does not already exist.
 
 \para{Sink}
+\label{sec:map:verbs:sink}
 Called when as part of a mapped function, an actor sinks data to an entity as an ‘atomic’ operation.
 Causes Stores to version, creating a new Store entity connected to the previous one by an INF relation.
 Creates an INF relation from actor to entity. 
 
 \para{Source}
+\label{sec:map:verbs:source}
 Called when as part of a mapped function, an actor sources data from an entity.
 Creates an INF relation from entity to actor.
 
 \para{Connect}
+\label{sec:map:verbs:connect}
 Called as part of a mapped function to declare that two channel nodes are connected to each other and that data can flow between them. The dir argument indicates the direction of flow, either mono or bi. Mono indicates that data may only flow from the first channel to the second, bi indicates that data may flow in both directions. 
 
 \para{Mention}
+\label{sec:map:verbs:mention}
 
 \para{Unlink}
+\label{sec:map:verbs:unlink}
 
 \para{Property}
+\label{sec:map:verbs:property}
 
 \appendix
 
 \section{A Worked Example}
+\label{app:example}
 
 \section{Neo4j Encoding}
 \label{app:enc:neo4j}
