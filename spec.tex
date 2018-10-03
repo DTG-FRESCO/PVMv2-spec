@@ -96,12 +96,15 @@ Entity nodes represent an \Entity~of an abstract type in the graph, they can be 
 
 \subsubsection{Non-canonical Names}
 \label{sec:gs:node:name}
+Non-canonical names are represented in the graph as nodes. These are meant for names that do not uniquely identify nodes, but that may only be valid for limited periods of time. Path-names are a prime example of the type of name this is most usefully applied to. We currently support two types of non-canonical names, however this may be expanded in future versions of the spec.
 
 \para{Path Names}
 \label{sec:gs:node:name:path}
+Path name nodes represent file paths in the pvm graph, the paths contained must be valid pathnames but beyond that there are no restrictions, both relative names and names including `.' and `..' are allowed. A path name node has a single \field{path}~field which holds the path it refers to.
 
 \para{Network Addresses}
 \label{sec:gs:node:name:net}
+Net address nodes store network addresses used to describe entities, they each have an \field{addr}~field which contains the IP address or hostname portion of the network address and a \field{port}~field which contains the port for the address.
 
 \subsection{Relations}
 \label{sec:gs:rel}
