@@ -92,6 +92,7 @@ Entity nodes represent an \Entity~of an abstract type in the graph, they can be 
 \para{Network Addresses}
 
 \subsection{Relations}
+All relations also possess a uniquely identifying id that will not repeat within the same graph.
 
 \begin{figure}[h]
 \centering
@@ -100,7 +101,7 @@ Entity nodes represent an \Entity~of an abstract type in the graph, they can be 
 \end{figure}
 
 \para{INF}
-Indicates that the source has potentially imparted data or control to the destination.
+Indicates that the source has potentially imparted data or control to the destination. An INF relation has a \field{ctx}~property that notes the context that it was created under. The relation also has a \field{pvm\_op}~field that describes which PVM verb was being processed when the edge was created, this can have one of the following values: Source, Sink, Connect, Version or Unknown. Edges with the Version op value are created when a verb causes a new node to come into existence which is notionally a new version of an existing node. It should be expected that two nodes on the ends of a version edge have the same UUID and represent a continuation of the same object. Unknown should not be used explicitly and is mostly provided as a safe default `don't know' option for parsing. Inf relations are in general only permitted between nodes that are Entity nodes of their subclasses.
 
 \para{NAMED}
 Indicates that the source has been mentioned by the destination non-canonical name.
