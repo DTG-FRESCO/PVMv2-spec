@@ -20,6 +20,7 @@
 \usepackage[hidelinks]{hyperref}
 
 \newcommand{\Entity}{\hyperref[sec:ty:entity]{Entity}}
+\newcommand{\para}[1]{\paragraph{#1\\}}
 
 \begin{document}
 \title{PVMv2 Specification}
@@ -45,21 +46,21 @@ The PVMv2 model defines a number of different abstract types which are used to b
 \label{fig:types}
 \end{figure}
 
-\paragraph{Entity}
+\para{Entity}
 \label{sec:ty:entity}
  is the root abstract type. The common feature of all entities is that they possess a uniquely identifying name that is either totally unique for some subtypes, or is maintained for version chains for other subtypes. In general concrete types should not be derived from Entity unless there is no better option available.
 
-\paragraph{Actor}
+\para{Actor}
 \label{sec:ty:actor}
  entities are active entities that perform actions, generally processing units such as unix processes, though they can also represent more abstract notions of processing. They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
 
-\paragraph{Object}
+\para{Object}
 Passive entities that are acted upon by actors. Generally data carrying entities.
 
-\paragraph{Store}
+\para{Store}
 Object type that stores data internally. Versions from first write to last write, using EditSessions.
 
-\paragraph{ChannelEP}
+\para{ChannelEP}
 Object type that data flows through without internal storage. Does not version. May participate in connections.
 
 \section{Graph Schema}
@@ -83,9 +84,9 @@ Entity nodes represent an \Entity~of an abstract type in the graph, they can be 
 
 \subsubsection{Non-canonical Names}
 
-\paragraph{Path Names}
+\para{Path Names}
 
-\paragraph{Network Addresses}
+\para{Network Addresses}
 
 \subsection{Relations}
 
@@ -95,10 +96,10 @@ Entity nodes represent an \Entity~of an abstract type in the graph, they can be 
 \caption{A diagram of the potential relations in a PVMv2 database.}
 \end{figure}
 
-\paragraph{INF}
+\para{INF}
 Indicates that the source has potentially imparted data or control to the destination.
 
-\paragraph{NAMED}
+\para{NAMED}
 Indicates that the source has been mentioned by the destination non-canonical name.
 
 \section{Mappings}
@@ -107,26 +108,26 @@ Indicates that the source has been mentioned by the destination non-canonical na
 
 \subsection{Verbs}
 
-\paragraph{Declare}
+\para{Declare}
 Forces the creation of entity if it does not already exist.
 
-\paragraph{Sink}
+\para{Sink}
 Called when as part of a mapped function, an actor sinks data to an entity as an ‘atomic’ operation.
 Causes Stores to version, creating a new Store entity connected to the previous one by an INF relation.
 Creates an INF relation from actor to entity. 
 
-\paragraph{Source}
+\para{Source}
 Called when as part of a mapped function, an actor sources data from an entity.
 Creates an INF relation from entity to actor.
 
-\paragraph{Connect}
+\para{Connect}
 Called as part of a mapped function to declare that two channel nodes are connected to each other and that data can flow between them. The dir argument indicates the direction of flow, either mono or bi. Mono indicates that data may only flow from the first channel to the second, bi indicates that data may flow in both directions. 
 
-\paragraph{Mention}
+\para{Mention}
 
-\paragraph{Unlink}
+\para{Unlink}
 
-\paragraph{Property}
+\para{Property}
 
 \appendix
 
