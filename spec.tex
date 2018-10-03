@@ -20,6 +20,7 @@
 \usepackage[hidelinks]{hyperref}
 
 \newcommand{\Entity}{\hyperref[sec:ty:entity]{Entity}}
+\newcommand{\field}[1]{\texttt{#1}}
 \newcommand{\para}[1]{\paragraph{#1\\}}
 
 \begin{document}
@@ -67,6 +68,7 @@ Object type that data flows through without internal storage. Does not version. 
 In this section we will describe how a well formed PVMv2 graph will appear. This does not necessarily inform directly how an encoding of such a graph may appear in a given medium, but should be taken as a strong suggestion of how it will be structured. In \autoref{app:enc:neo4j} we describe the encoding of such graphs in Neo4j and in \autoref{app:enc:cdm} their encoding into CDM.
 
 \subsection{Nodes}
+All graph nodes possess a unique id that is not shared with any other nodes in the same graph.
 
 \begin{figure}[h]
 \centering
