@@ -54,7 +54,7 @@ The PVMv2 model defines a number of different abstract types which are used to b
 
 \para{Actor}
 \label{sec:ty:actor}
- entities are active entities that perform actions, generally processing units such as unix processes, though they can also represent more abstract notions of processing. They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
+ entities are active entities that perform actions, generally processing units such as UNIX processes, though they can also represent more abstract notions of processing. They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
 
 \para{Object}
 \label{sec:ty:object}
@@ -92,7 +92,7 @@ Schema nodes describe concrete types that are defined by the mapping that create
 
 \subsubsection{Entity Nodes}
 \label{sec:gs:node:entity}
-Entity nodes represent an \Entity~of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined earlier. All entity nodes have a \field{uuid}~field defining the unique name for the entity, a \field{ty}~field naming the concrete type that the entity is a representative of, and a \field{ctx}~field noting the context under which the entity was created.
+Entity nodes represent an \Entity~of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid}~field defining the unique name for the entity, a \field{ty}~field naming the concrete type that the entity is a representative of, and a \field{ctx}~field noting the context under which the entity was created.
 
 \subsubsection{Non-canonical Names}
 \label{sec:gs:node:name}
