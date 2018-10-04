@@ -150,28 +150,28 @@ A PVMv2 mapping describes how to process a certain type of raw event trace under
 \label{sec:map:verbs:declare}
 Forces the creation of an \Entity/ \field{e} named by \field{uuid} if it does not already exist.
 
-\para{\texttt{sink(src, dst) -> ()}}
+\para{\texttt{sink(src:Actor, dst:Entity)}}
 \label{sec:map:verbs:sink}
 Called when as part of a mapped function, an \Actor/ \field{src} sinks data to an \Entity/ \field{dst} as an ‘atomic’ operation.
 Causes \Store/s to version, creating a new \Store/ entity connected to the previous one by an \INF/ relation.
 Creates an \INF/ relation from \Actor/ \field{src} to \Entity/ \field{dst}. 
 
-\para{\texttt{source(src, dst) -> ()}}
+\para{\texttt{source(src:Entity, dst:Actor)}}
 \label{sec:map:verbs:source}
 Called when as part of a mapped function, an actor sources data from an entity.
 Creates an INF relation from entity to actor.
 
-\para{\texttt{connect(ep1, ep2, dir) -> ()}}
+\para{\texttt{connect(ep1:ChannelEP, ep2:ChannelEP, dir)}}
 \label{sec:map:verbs:connect}
 Called as part of a mapped function to declare that two channel nodes are connected to each other and that data can flow between them. The dir argument indicates the direction of flow, either mono or bi. Mono indicates that data may only flow from the first channel to the second, bi indicates that data may flow in both directions. 
 
-\para{\texttt{mention(e, n) -> ()}}
+\para{\texttt{mention(e:Entity, n:Name)}}
 \label{sec:map:verbs:mention}
 
-\para{\texttt{unlink(e, n) -> ()}}
+\para{\texttt{unlink(e:Entity, n:Name)}}
 \label{sec:map:verbs:unlink}
 
-\para{\texttt{property(e, pname, pval) -> ()}}
+\para{\texttt{property(e:Entity, pname:str, pval:str)}}
 \label{sec:map:verbs:property}
 
 \appendix
