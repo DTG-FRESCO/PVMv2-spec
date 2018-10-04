@@ -19,7 +19,18 @@
 \usepackage{tikz-uml}
 \usepackage[hidelinks]{hyperref}
 
-\newcommand{\Entity}{\hyperref[sec:ty:entity]{Entity}}
+\makeatletter
+    \@ifdefinable{\Entity}{\def\Entity/{\hyperref[sec:ty:entity]{Entity}}}
+\makeatother
+\makeatletter
+    \@ifdefinable{\Actor}{\def\Actor/{\hyperref[sec:ty:actor]{Actor}}}
+\makeatother
+\makeatletter
+    \@ifdefinable{\Store}{\def\Store/{\hyperref[sec:ty:store]{Store}}}
+\makeatother
+\makeatletter
+    \@ifdefinable{\INF}{\def\INF/{\hyperref[sec:gs:rel:inf]{INF}}}
+\makeatother
 \newcommand{\field}[1]{\texttt{#1}}
 \newcommand{\para}[1]{\paragraph{#1\\}}
 
@@ -92,7 +103,7 @@ Schema nodes describe concrete types that are defined by the mapping that create
 
 \subsubsection{Entity Nodes}
 \label{sec:gs:node:entity}
-Entity nodes represent an \Entity~of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid}~field defining the unique name for the entity, a \field{ty}~field naming the concrete type that the entity is a representative of, and a \field{ctx}~field noting the context under which the entity was created.
+Entity nodes represent an \Entity/ of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid} field defining the unique name for the entity, a \field{ty} field naming the concrete type that the entity is a representative of, and a \field{ctx} field noting the context under which the entity was created.
 
 \subsubsection{Non-canonical Names}
 \label{sec:gs:node:name}
@@ -100,11 +111,11 @@ Non-canonical names are represented in the graph as nodes. These are meant for n
 
 \para{Path Names}
 \label{sec:gs:node:name:path}
-Path name nodes represent file paths in the pvm graph, the paths contained must be valid pathnames but beyond that there are no restrictions, both relative names and names including `.' and `..' are allowed. A path name node has a single \field{path}~field which holds the path it refers to.
+Path name nodes represent file paths in the pvm graph, the paths contained must be valid pathnames but beyond that there are no restrictions, both relative names and names including `.' and `..' are allowed. A path name node has a single \field{path} field which holds the path it refers to.
 
 \para{Network Addresses}
 \label{sec:gs:node:name:net}
-Net address nodes store network addresses used to describe entities, they each have an \field{addr}~field which contains the IP address or hostname portion of the network address and a \field{port}~field which contains the port for the address.
+Net address nodes store network addresses used to describe entities, they each have an \field{addr} field which contains the IP address or hostname portion of the network address and a \field{port} field which contains the port for the address.
 
 \subsection{Relations}
 \label{sec:gs:rel}
@@ -119,7 +130,7 @@ All relations also possess a uniquely identifying id that will not repeat within
 
 \para{INF}
 \label{sec:gs:rel:inf}
-Indicates that the source has potentially imparted data or control to the destination. An INF relation has a \field{ctx}~property that notes the context that it was created under. The relation also has a \field{pvm\_op}~field that describes which PVM verb was being processed when the edge was created, this can have one of the following values: Source, Sink, Connect, Version or Unknown. Edges with the Version op value are created when a verb causes a new node to come into existence which is notionally a new version of an existing node. It should be expected that two nodes on the ends of a version edge have the same UUID and represent a continuation of the same object. Unknown should not be used explicitly and is mostly provided as a safe default `don't know' option for parsing. Inf relations are in general only permitted between nodes that are Entity nodes of their subclasses.
+Indicates that the source has potentially imparted data or control to the destination. An INF relation has a \field{ctx} property that notes the context that it was created under. The relation also has a \field{pvm\_op} field that describes which PVM verb was being processed when the edge was created, this can have one of the following values: Source, Sink, Connect, Version or Unknown. Edges with the Version op value are created when a verb causes a new node to come into existence which is notionally a new version of an existing node. It should be expected that two nodes on the ends of a version edge have the same UUID and represent a continuation of the same object. Unknown should not be used explicitly and is mostly provided as a safe default `don't know' option for parsing. Inf relations are in general only permitted between nodes that are Entity nodes of their subclasses.
 
 \para{NAMED}
 \label{sec:gs:rel:named}
@@ -137,13 +148,13 @@ A PVMv2 mapping describes how to process a certain type of raw event trace under
 
 \para{\texttt{declare(ctype, uuid) -> e}}
 \label{sec:map:verbs:declare}
-Forces the creation of entity if it does not already exist.
+Forces the creation of an \Entity/ \field{e} named by \field{uuid} if it does not already exist.
 
 \para{\texttt{sink(src, dst) -> ()}}
 \label{sec:map:verbs:sink}
-Called when as part of a mapped function, an actor sinks data to an entity as an ‘atomic’ operation.
-Causes Stores to version, creating a new Store entity connected to the previous one by an INF relation.
-Creates an INF relation from actor to entity. 
+Called when as part of a mapped function, an \Actor/ \field{src} sinks data to an \Entity/ \field{dst} as an ‘atomic’ operation.
+Causes \Store/s to version, creating a new \Store/ entity connected to the previous one by an \INF/ relation.
+Creates an \INF/ relation from \Actor/ \field{src} to \Entity/ \field{dst}. 
 
 \para{\texttt{source(src, dst) -> ()}}
 \label{sec:map:verbs:source}
