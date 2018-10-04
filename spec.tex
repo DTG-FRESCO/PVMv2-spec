@@ -39,7 +39,7 @@ This document aims to describe the conceptual basis behind the PVMv2 model, expl
 
 \section{Abstract Types}
 \label{sec:ty}
-The PVMv2 model defines a number of different abstract types which are used to both represent data in the resulting graph format, and as a basis for deriving concrete types to represent real trace entities. Figure~\ref{fig:types} shows a UML representation of the different types and how they are related. Below we will go into more detail on each of the types in turn.
+The PVMv2 model defines a number of different abstract types which are used to both represent data in the resulting graph format, and as a basis for deriving concrete types to represent real trace entities. \autoref{fig:types} shows a UML representation of the different types and how they are related. Below we will go into more detail on each of the types in turn.
 
 \begin{figure}[h]
 \centering
@@ -127,6 +127,7 @@ Indicates that the source has been mentioned by the destination non-canonical na
 
 \section{Mappings}
 \label{sec:map}
+A PVMv2 mapping describes how to process a certain type of raw event trace under the PVMv2 model. It comprises of a set of concrete type definitions, which describe the different types of entities that exist within the raw trace, and how those entities match to the PVMv2 abstract types. It also contains a set of mapping expressions utilizing the PVMv2 verbs to describe the semantic connotations of a given raw event, resulting in notionally a function that given a raw event applies a set of updates to the graph describing the current state in PVMv2 semantics.
 
 \subsection{Concrete Type Declaration}
 \label{sec:map:tydef}
@@ -134,32 +135,32 @@ Indicates that the source has been mentioned by the destination non-canonical na
 \subsection{Verbs}
 \label{sec:map:verbs}
 
-\para{Declare}
+\para{\texttt{declare(ctype, uuid) -> e}}
 \label{sec:map:verbs:declare}
 Forces the creation of entity if it does not already exist.
 
-\para{Sink}
+\para{\texttt{sink(src, dst) -> ()}}
 \label{sec:map:verbs:sink}
 Called when as part of a mapped function, an actor sinks data to an entity as an ‘atomic’ operation.
 Causes Stores to version, creating a new Store entity connected to the previous one by an INF relation.
 Creates an INF relation from actor to entity. 
 
-\para{Source}
+\para{\texttt{source(src, dst) -> ()}}
 \label{sec:map:verbs:source}
 Called when as part of a mapped function, an actor sources data from an entity.
 Creates an INF relation from entity to actor.
 
-\para{Connect}
+\para{\texttt{connect(ep1, ep2, dir) -> ()}}
 \label{sec:map:verbs:connect}
 Called as part of a mapped function to declare that two channel nodes are connected to each other and that data can flow between them. The dir argument indicates the direction of flow, either mono or bi. Mono indicates that data may only flow from the first channel to the second, bi indicates that data may flow in both directions. 
 
-\para{Mention}
+\para{\texttt{mention(e, n) -> ()}}
 \label{sec:map:verbs:mention}
 
-\para{Unlink}
+\para{\texttt{unlink(e, n) -> ()}}
 \label{sec:map:verbs:unlink}
 
-\para{Property}
+\para{\texttt{property(e, pname, pval) -> ()}}
 \label{sec:map:verbs:property}
 
 \appendix
