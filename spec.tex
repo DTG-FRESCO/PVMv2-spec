@@ -163,6 +163,7 @@ Called as part of a mapped function to declare that two channel nodes are connec
 
 \para{\texttt{mention(e:Entity, n:Name)}}
 \label{sec:map:verbs:mention}
+Indicates that as part of a mapped function an \Entity/ \field{e} has been reffered to using the name \field{n}. This will generate a \NAMED/ relation from \field{e} to \field{n} if one does not already exist.
 
 \para{\texttt{unlink(e:Entity, n:Name)}}
 \label{sec:map:verbs:unlink}
