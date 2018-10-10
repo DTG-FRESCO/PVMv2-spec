@@ -21,15 +21,10 @@
 
 \makeatletter
     \@ifdefinable{\Entity}{\def\Entity/{\hyperref[sec:ty:entity]{Entity}}}
-\makeatother
-\makeatletter
     \@ifdefinable{\Actor}{\def\Actor/{\hyperref[sec:ty:actor]{Actor}}}
-\makeatother
-\makeatletter
     \@ifdefinable{\Store}{\def\Store/{\hyperref[sec:ty:store]{Store}}}
-\makeatother
-\makeatletter
     \@ifdefinable{\INF}{\def\INF/{\hyperref[sec:gs:rel:inf]{INF}}}
+    \@ifdefinable{\NAMED}{\def\NAMED/{\hyperref[sec:gs:rel:named]{NAMED}}}
 \makeatother
 \newcommand{\field}[1]{\texttt{#1}}
 \newcommand{\para}[1]{\paragraph{#1\\}}
