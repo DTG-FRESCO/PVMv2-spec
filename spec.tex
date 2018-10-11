@@ -39,13 +39,19 @@
 
 \section{Introduction}
 \label{sec:intro}
-PVMv2 is a model designed to aid in the extraction of high level data flow interactions from low level event traces. It achieves this by using descriptive mapping programs written in a custom DSL by people who understand the semantic content of the event trace in question. This mapping can then be applied to actual trace events and results in the iterative production of a dataflow graph.
+PVMv2 is a model designed for converting low level event traces into graphs representing data flow interactions. 
+%COMMENT(lc525) the end goal here is to have representations which span multiple abstraction levels, although at the moment the conversion happens at a well-defined granularity close to that of the trace
+
+It achieves this by allowing people with an in-depth understanding of event trace semantics to use a minimal DSL for defining a mapping between the two worlds. 
+The mapping governs how different event types in the trace create new data flows, change existing ones or modify the resulting graph in a different (restricted) way. 
+This mapping is then applied to actual trace events, resulting in the iterative construction of a data flow graph.
 
 This document aims to describe the conceptual basis behind the PVMv2 model, explain how the resulting dataflow graph is structured and what assumptions can be made about it, and how one would go about creating a mapping to interpret new data under the guise of the PVMv2 model.
 
 \section{Abstract Types}
 \label{sec:ty}
-The PVMv2 model defines a number of different abstract types which are used to both represent data in the resulting graph format, and as a basis for deriving concrete types to represent real trace entities. \autoref{fig:types} shows a UML representation of the different types and how they are related. Below we will go into more detail on each of the types in turn.
+The PVMv2 model defines a number of different abstract types which are used both to represent data in the resulting graph format, and as a basis for deriving concrete types to represent real trace entities. 
+\autoref{fig:types} shows a UML representation of the different types and how they are related. Below we will go into more detail on each of the types in turn.
 
 \begin{figure}[h]
 \centering
@@ -54,29 +60,35 @@ The PVMv2 model defines a number of different abstract types which are used to b
 \label{fig:types}
 \end{figure}
 
-\para{Entity}
+\begin{description}
+\item[Entity]
 \label{sec:ty:entity}
- is the root abstract type. The common feature of all entities is that they possess a uniquely identifying name that is either totally unique for some subtypes, or is maintained for version chains for other subtypes. In general concrete types should not be derived from Entity unless there is no better option available.
+ is the root abstract type. The common feature of all entities is that they possess a uniquely identifying name that is either totally unique for some subtypes, or is maintained for version chains for other subtypes. 
+ In general concrete types should not be derived from Entity unless there is no better option available.
 
-\para{Actor}
+\item[Actor]
 \label{sec:ty:actor}
- entities are active entities that perform actions, generally processing units such as UNIX processes, though they can also represent more abstract notions of processing. They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
+ entities are active entities that perform actions, generally processing units such as UNIX processes, though they can also represent more abstract notions of processing. 
+ They are directly comparable to subjects in the orange book. They act upon objects, or other actors.
 
-\para{Object}
+\item[Objects]
 \label{sec:ty:object}
-Passive entities that are acted upon by actors. Generally data carrying entities.
+are passive entities that are used by actors. Generally data carrying entities.
 
-\para{Store}
+\item[Store]
 \label{sec:ty:store}
-Object type that stores data internally. Versions from first write to last write, using EditSessions.
+Object type that stores data internally. 
+Such objects version on first write and last write. libPVM uses a Store subclass called EditSession to represent time intervals where a Store is concurrently modified by multiple users. If thread/process interleaving data within an EditSession is important, one will have to look at the  events in the original trace and deduce things from there.
 
-\para{ChannelEP}
+\item[ChannelEP (end point)]
 \label{sec:ty:chanep}
 Object type that data flows through without internal storage. Does not version. May participate in connections.
+\end{description}
 
 \section{Graph Schema}
 \label{sec:gs}
-In this section we will describe how a well formed PVMv2 graph will appear. This does not necessarily inform directly how an encoding of such a graph may appear in a given medium, but should be taken as a strong suggestion of how it will be structured. In \autoref{app:enc:neo4j} we describe the encoding of such graphs in Neo4j and in \autoref{app:enc:cdm} their encoding into CDM.
+In this section we will describe how a well formed PVMv2 graph will appear. This does not necessarily inform directly how an encoding of such a graph may appear in a given medium, but should be taken as a strong suggestion of how it will be structured. 
+In \autoref{app:enc:neo4j} we describe the encoding of such graphs in Neo4j and in \autoref{app:enc:cdm} their encoding into CDM.
 
 \subsection{Nodes}
 \label{sec:gs:node}
@@ -126,7 +138,7 @@ All relations also possess a uniquely identifying id that will not repeat within
 
 \para{INF}
 \label{sec:gs:rel:inf}
-Indicates that the source has potentially imparted data or control to the destination. An INF relation has a \field{ctx} property that notes the context that it was created under. The relation also has a \field{pvm\_op} field that describes which PVM verb was being processed when the edge was created, this can have one of the following values: Source, Sink, Connect, Version or Unknown. Edges with the Version op value are created when a verb causes a new node to come into existence which is notionally a new version of an existing node. It should be expected that two nodes on the ends of a version edge have the same UUID and represent a continuation of the same object. Unknown should not be used explicitly and is mostly provided as a safe default `don't know' option for parsing. Inf relations are in general only permitted between nodes that are Entity nodes of their subclasses.
+Indicates that the source has potentially influenced, directly (through data) or indirectly (through control flow) the destination. An INF relation has a \field{ctx} property that notes the context that it was created under. The relation also has a \field{pvm\_op} field that describes which PVM verb was being processed when the edge was created, this can have one of the following values: Source, Sink, Connect, Version or Unknown. Edges with the Version op value are created when a verb causes a new node to come into existence which is notionally a new version of an existing node. It should be expected that two nodes on the ends of a version edge have the same UUID and represent a continuation of the same object. Unknown should not be used explicitly and is mostly provided as a safe default `don't know' option for parsing. Inf relations are in general only permitted between nodes that are Entity nodes of their subclasses. %TODO(lc525): clarify and rephrase last bit
 
 \para{NAMED}
 \label{sec:gs:rel:named}
