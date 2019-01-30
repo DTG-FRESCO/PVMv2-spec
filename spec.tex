@@ -30,6 +30,7 @@
 \newcommand{\para}[1]{\paragraph{#1\\}}
 
 \begin{document}
+
 \title{PVM2 Specification\\\normalsize Version 0.5.0}
 \author{Thomas Bytheway \and Lucian Carata}
 
@@ -113,11 +114,11 @@ Schema nodes describe concrete types that are defined by the mapping that create
 
 \subsubsection{Context Nodes}
 \label{sec:gs:node:context}
-Context nodes describe the context within which other entities and relations have been created. Each has a \field{ty} field that notes a schema node describing the properties that the context node may have, it may then have additional fields matching these named properties.
+Context nodes describe the context within which other entities and relations have been created. Each has a \field{type} field that notes a schema node describing the properties that the context node may have, it may then have additional fields matching these named properties.
 
 \subsubsection{Entity Nodes}
 \label{sec:gs:node:entity}
-Entity nodes represent an \Entity/ of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid} field defining the unique name for the entity, a \field{ty} field naming the concrete type that the entity is a representative of, and a \field{ctx} field noting the context under which the entity was created.
+Entity nodes represent an \Entity/ of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid} field defining the unique name for the entity, a \field{type} field naming the concrete type that the entity is a representative of, and a \field{ctx} field noting the context under which the entity was created.
 
 \subsubsection{Non-canonical Names}
 \label{sec:gs:node:name}
@@ -194,10 +195,31 @@ Indicates that as part of a mapped function an \Entity/ \field{e} has been reffe
 \section{A Worked Example}
 \label{app:example}
 
-\section{Neo4j Encoding}
+\section{Neo4j Serialisation}
 \label{app:enc:neo4j}
 
-\section{CDM Encoding}
+All database objects have a \field{db\_id} property that encodes the database identifier for that object. These should be interpreted bitwise as unsigned 64 bit integers (rather than signed 64 bit integers as neo4j would normally present them).
+
+All database nodes have the "Node" label, and are indexed by their \field{db\_id} field on this label.
+
+Schema nodes are labelled with "Node, Schema". They then have \field{name}, \field{abstract} and \field{properties} fields as described earlier.
+
+Context nodes are labelled with "Node, Context". They have a \field{type} field which matches the \field{name} field of a Schema node noting what schema the Context node is following. The node then has additional fields matching the names in the matching schema node's \field{properties} field.
+
+Name nodes are all labelled "Node, Name".
+
+Path name nodes are labelled "Node, Name, Path". They then have a \field{path} field.
+
+Net name nodes are labelled "Node, Name, Net". They then have an \field{addr} field containing the net address and a \field{port} field containing the port number.
+
+Entity nodes are labelled "Node, Entity" plus additional labels for sub types such as "Actor" or "Store". They all have a \field{type} field noting thier concrete entity type, which should match a Schema node, they have a \field{uuid} field noting thier UUID, a \field{ctx} referencing the \field{db\_id} value of a Context node, a \field{meta} field with a historic time series of updates made to property values and as a convenience feature they also have the most recent value for each property value stored as a field on the node.
+
+INF edges have the label "INF". They have a \field{ctx} field that matches the \field{db\_id} of a Context Node, a \field{pvm\_op} field that notes what PVM operation caused their creation.
+
+NAMED edges have the label "NAMED". They have a \field{start} field that matches the \field{db\_id} of a Context node and potentially a \field{end}
+ field that matches the \field{db\_id} of a Context node.
+
+\section{CDM Serialisation}
 \label{app:enc:cdm}
 
 \end{document}
