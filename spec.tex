@@ -30,7 +30,7 @@
 \newcommand{\para}[1]{\paragraph{#1\\}}
 
 \begin{document}
-\title{PVMv2 Specification\\\normalsize Version 0.4.0}
+\title{PVM2 Specification\\\normalsize Version 0.5.0}
 \author{Thomas Bytheway \and Lucian Carata}
 
 \maketitle
@@ -39,14 +39,20 @@
 
 \section{Introduction}
 \label{sec:intro}
-PVMv2 is a model designed for converting low level event traces into graphs representing data flow interactions. 
-%COMMENT(lc525) the end goal here is to have representations which span multiple abstraction levels, although at the moment the conversion happens at a well-defined granularity close to that of the trace
+PVM2 is a model designed for converting event logs of OS and program actions into graphs representing data flow interactions. It has been built around data produced by Distributed DTrace as part of the DARPA Transparent Computing Programme (OS-level activity recording), but is usable beyond modelling system-call level traces.
 
-It achieves this by allowing people with an in-depth understanding of event trace semantics to use a minimal DSL for defining a mapping between the two worlds. 
-The mapping governs how different event types in the trace create new data flows, change existing ones or modify the resulting graph in a different (restricted) way. 
-This mapping is then applied to actual trace events, resulting in the iterative construction of a data flow graph.
+It achieves this by allowing people with an in-depth understanding of the guarantees and information provided by their event log to use a minimal DSL for defining a mapping between the two worlds (a linear log and the resulting graph). 
+The mapping governs how different event types in the log create new data flows, change existing ones or modify the resulting graph in a different (restricted) way. 
+This mapping is then applied to actual recorded events, resulting in the iterative construction of a data flow graph.
 
-This document aims to describe the conceptual basis behind the PVMv2 model, explain how the resulting dataflow graph is structured and what assumptions can be made about it, and how one would go about creating a mapping to interpret new data under the guise of the PVMv2 model.
+This document aims to describe the conceptual basis behind the PVM2 model, explain how the resulting dataflow graph is structured, what assumptions can be made about it, and how one would go about creating a mapping to interpret new data under the guise of the PVM2 model.
+
+The model is used by a library (libPVM) that can be linked into any process to perform (depending on requirements), data ingestion, persistence and querying. The implementation can be customized with new mappings, persistence layers, etc.
+
+\section{Goals}
+The end goal for PVM is to enable transformations from multiple types of trace and event logs into graph representations which are dynamic (they can be locally expanded/contracted in accordance to semantically meaningful rules). It should be possible to keep representations across multiple abstraction levels and at different granularities, with connections between them.
+
+This document presents a small part of that vision, strictly related to the data model and the operations mapping the external world (logs) into that data model. 
 
 \section{Abstract Types}
 \label{sec:ty}
