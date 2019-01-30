@@ -107,11 +107,11 @@ Schema nodes describe concrete types that are defined by the mapping that create
 
 \subsubsection{Context Nodes}
 \label{sec:gs:node:context}
-Context nodes describe the context within which other entities and relations have been created. Each has a \field{ty} field that notes a schema node describing the properties that the context node may have, it may then have additional fields matching these named properties.
+Context nodes describe the context within which other entities and relations have been created. Each has a \field{type} field that notes a schema node describing the properties that the context node may have, it may then have additional fields matching these named properties.
 
 \subsubsection{Entity Nodes}
 \label{sec:gs:node:entity}
-Entity nodes represent an \Entity/ of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid} field defining the unique name for the entity, a \field{ty} field naming the concrete type that the entity is a representative of, and a \field{ctx} field noting the context under which the entity was created.
+Entity nodes represent an \Entity/ of an abstract type in the graph, they can be additionally subclassed into the abstract types as defined in \autoref{sec:ty}. All entity nodes have a \field{uuid} field defining the unique name for the entity, a \field{type} field naming the concrete type that the entity is a representative of, and a \field{ctx} field noting the context under which the entity was created.
 
 \subsubsection{Non-canonical Names}
 \label{sec:gs:node:name}
